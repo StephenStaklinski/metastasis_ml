@@ -14,9 +14,9 @@ Then, generate the training and testing data:
 ./scripts/sim_tree_dataset_wrapper.sh --name TEST --num_trees 100 --migration_matrix_folder ./migration_matrix --cores 20
 ```
 
-Then, fit the model and find the predeiction accuracy for internal node tissue labels:
+Then, fit the model and find the prediction accuracy for internal node tissue labels:
 ```
-conda acivate sklearn
+conda activate sklearn
 python scripts/gbm_model.py tree_dataset_TRAIN.csv tree_dataset_TEST.csv
 conda deactivate
 ```
