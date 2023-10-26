@@ -31,8 +31,8 @@ j=0
 for migration_matrix in "$MIGRATION"/*; do
     for ((rep=0; rep<NUM_TREES; rep++))   ### Can set the amount of repeat simulations with the same parameters
     do
-    output_path="batch_sim${j}.csv"
-    cmd="python scripts/simulator.py 100 ${migration_matrix} ${output_path}"
+    output_name="batch_sim${j}"
+    cmd="python scripts/simulator.py 100 ${migration_matrix} ${output_name}"
     commands+=("$cmd")
     j=$((j+1))
     done
@@ -40,7 +40,7 @@ done
 
 echo "There are ${#commands[@]} commands to be submitted."
 
-echo "l1_tissue,l2_tissue,total_nodes_leaves,total_num_leaves,total_num_nodes,proportion_leaves_l1_tissue,proportion_leaves_l2_tissue,l1_sis_tissue,l2_sis_tissue,num_nodes_prior_l1,num_nodes_prior_l2,tissues_matching,dist_l1_l2,mrca_proportion_children_root_tissue,mrca_proportion_children_l1_tissue,mrca_proportion_children_l2_tissue,mrca_tissue" > tree_dataset_${NAME}.csv
+echo "l1_name,l2_name,mrca_name,l1_tissue,l2_tissue,total_nodes_leaves,total_num_leaves,total_num_nodes,proportion_leaves_l1_tissue,proportion_leaves_l2_tissue,l1_sis_tissue,l2_sis_tissue,num_nodes_prior_l1,num_nodes_prior_l2,tissues_matching,dist_l1_l2,mrca_proportion_children_root_tissue,mrca_proportion_children_l1_tissue,mrca_proportion_children_l2_tissue,mrca_tissue" > tree_dataset_${NAME}.csv
 
 batch_size=${CORES}
 num_batches=$(((${#commands[@]} / $batch_size) + 1))
@@ -69,7 +69,9 @@ do
   ParaFly -CPU ${batch_size} -c ${i}.cmd
   rm ${i}.cmd
   rm ${i}.cmd.completed
-  for f in batch_sim*; do tail -n +2 "$f" | cut -f3- -d"," >> "tree_dataset_${NAME}.csv"; done
+  # for f in batch_sim*; do tail -n +2 "$f" | cut -f3- -d"," >> "tree_dataset_${NAME}.csv"; done
+    for f in batch_sim*; do tail -n +2 "$f" >> "tree_dataset_${NAME}.csv"; done
+
 
   rm batch_sim*
 done

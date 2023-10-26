@@ -293,7 +293,7 @@ def assign_tissue_labels(cas_tree,trans_mat):
 
 sample_num = int(sys.argv[1])
 migration_matrix_filepath = sys.argv[2]
-output_filepath = sys.argv[3]
+output_name = sys.argv[3]
 
 # sample_num = 100
 # migration_matrix_filepath = "migration_matrix/true_migration_prob_matrix.csv"
@@ -304,8 +304,6 @@ if sample_num > 10000:
 
 if migration_matrix_filepath != 'NA':
     migration_matrix = pd.read_csv(migration_matrix_filepath, header=0, index_col=0).to_dict(orient='index')
-
-
 
 
 # if design == 'BC10v0':
@@ -381,10 +379,13 @@ if migration_matrix_filepath != 'NA':
     # overlay tissue labels for migration information
     tissue_labels_df, labeled_tree = assign_tissue_labels(ground_truth_tree,migration_matrix)
 
+
 ### Iterate through tree to make matrix of features and prediction is MRCA is a transition
 # initialize dataframe to save training datasets
-features_df = pd.DataFrame(columns = ['l1_name', 
+features_df = pd.DataFrame(columns = ['tree_name',
+                                        'l1_name', 
                                         'l2_name', 
+                                        'mrca_name',
                                         'l1_tissue',
                                         'l2_tissue',
                                         'total_nodes_leaves',
@@ -471,11 +472,11 @@ for leaf1 in labeled_tree.iter_leaves():
             tissues_matching = l1_tissue == l2_tissue
             dist_l1_l2 = leaf1.get_distance(leaf2)
             mrca = labeled_tree.get_common_ancestor(leaf1, leaf2)
+            mrca_name, mrca_tissue = mrca.name.split("_")
             if mrca.is_root() == True:
                 mrca_migration_event = False
                 mrca_proportion_children_root_tissue = tissue_proportions[root_tissue]
             else:
-                mrca_name, mrca_tissue = mrca.name.split("_")
                 mrca_children_leaves = [name.split("_")[1] for name in mrca.get_leaf_names()]
                 total_children = len(mrca_children_leaves)
                 mrca_proportion_children_root_tissue = mrca_children_leaves.count(root_tissue) / total_children
@@ -489,8 +490,10 @@ for leaf1 in labeled_tree.iter_leaves():
                 #     mrca_migration_event = False
                 
 
-            data = {'l1_name' : l1_name, 
+            data = {'tree_name' : output_name,
+                    'l1_name' : l1_name, 
                     'l2_name' : l2_name, 
+                    'mrca_name' : mrca_name,
                     'l1_tissue' : l1_tissue,
                     'l2_tissue' : l2_tissue,
                     'total_nodes_leaves' : total_nodes_leaves,
@@ -512,7 +515,7 @@ for leaf1 in labeled_tree.iter_leaves():
             
             used_pairs.append(f'{l2_name}_{l1_name}')
 
-features_df.to_csv(output_filepath, index=False)
+features_df.to_csv(f'{output_name}.csv', index=False)
 
 
 
