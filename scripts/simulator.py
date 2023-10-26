@@ -385,19 +385,23 @@ if migration_matrix_filepath != 'NA':
 # initialize dataframe to save training datasets
 features_df = pd.DataFrame(columns = ['l1_name', 
                                         'l2_name', 
+                                        'l1_tissue',
+                                        'l2_tissue',
                                         'total_nodes_leaves',
                                         'total_num_leaves', 
                                         'total_num_nodes', 
                                         'proportion_leaves_l1_tissue',
                                         'proportion_leaves_l2_tissue',
-                                        'l1_sis_tissue_match',
-                                        'l2_sis_tissue_match',
+                                        'l1_sis_tissue',
+                                        'l2_sis_tissue',
                                         'num_nodes_prior_l1',
                                         'num_nodes_prior_l2',
                                         'tissues_matching', 
                                         'dist_l1_l2',
                                         'mrca_proportion_children_root_tissue',
-                                        'mrca_migration_event'])
+                                        'mrca_proportion_children_l1_tissue',
+                                        'mrca_proportion_children_l2_tissue',
+                                        'mrca_tissue'])
 
 # make all branch lengths 1 for relative mrca dist calculations
 for node in labeled_tree.traverse():
@@ -428,13 +432,15 @@ for leaf1 in labeled_tree.iter_leaves():
     proportion_leaves_l1_tissue = tissue_proportions[l1_tissue]
     l1_parent = leaf1.up
     l1_parent_children = l1_parent.children
-    l1_sis_tissue_match = False
+    # l1_sis_tissue_match = False
     for child in l1_parent_children:
         child_name, child_tissue = child.name.split("_")
         if child_name == l1_name:
             continue
-        elif child_tissue == l1_tissue:
-            l1_sis_tissue_match = True
+        else:
+            l1_sis_tissue = child_tissue
+        # elif child_tissue == l1_tissue:
+        #     l1_sis_tissue_match = True
     num_nodes_prior_l1 = 0
     current_node = leaf1
     while current_node.up:
@@ -448,13 +454,15 @@ for leaf1 in labeled_tree.iter_leaves():
             proportion_leaves_l2_tissue = tissue_proportions[l2_tissue]
             l2_parent = leaf2.up
             l2_parent_children = l2_parent.children
-            l2_sis_tissue_match = False
+            # l2_sis_tissue_match = False
             for child in l2_parent_children:
                 child_name, child_tissue = child.name.split("_")
                 if child_name == l2_name:
                     continue
-                elif child_tissue == l2_tissue:
-                    l2_sis_tissue_match = True
+                else:
+                    l2_sis_tissue = child_tissue
+                # elif child_tissue == l2_tissue:
+                #     l2_sis_tissue_match = True
             num_nodes_prior_l2 = 0
             current_node = leaf2
             while current_node.up:
@@ -469,30 +477,37 @@ for leaf1 in labeled_tree.iter_leaves():
             else:
                 mrca_name, mrca_tissue = mrca.name.split("_")
                 mrca_children_leaves = [name.split("_")[1] for name in mrca.get_leaf_names()]
-                mrca_proportion_children_root_tissue = mrca_children_leaves.count(root_tissue) / len(mrca_children_leaves)
-                mrca_parent = mrca.up
-                mrca_parent_name, mrca_parent_tissue = mrca_parent.name.split("_")
-                if mrca_parent_tissue != mrca_tissue:
-                    mrca_migration_event = True
-                else:
-                    mrca_migration_event = False
+                total_children = len(mrca_children_leaves)
+                mrca_proportion_children_root_tissue = mrca_children_leaves.count(root_tissue) / total_children
+                mrca_proportion_children_l1_tissue = mrca_children_leaves.count(l1_tissue) / total_children
+                mrca_proportion_children_l2_tissue = mrca_children_leaves.count(l2_tissue) / total_children
+                # mrca_parent = mrca.up
+                # mrca_parent_name, mrca_parent_tissue = mrca_parent.name.split("_")
+                # if mrca_parent_tissue != mrca_tissue:
+                #     mrca_migration_event = True
+                # else:
+                #     mrca_migration_event = False
                 
 
             data = {'l1_name' : l1_name, 
                     'l2_name' : l2_name, 
+                    'l1_tissue' : l1_tissue,
+                    'l2_tissue' : l2_tissue,
                     'total_nodes_leaves' : total_nodes_leaves,
                     'total_num_leaves' : total_num_leaves, 
                     'total_num_nodes' : total_num_nodes, 
                     'proportion_leaves_l1_tissue' : proportion_leaves_l1_tissue,
                     'proportion_leaves_l2_tissue' : proportion_leaves_l2_tissue,
-                    'l1_sis_tissue_match' : l1_sis_tissue_match,
-                    'l2_sis_tissue_match' : l2_sis_tissue_match,
+                    'l1_sis_tissue' : l1_sis_tissue,
+                    'l2_sis_tissue' : l2_sis_tissue,
                     'num_nodes_prior_l1' : num_nodes_prior_l1,
                     'num_nodes_prior_l2' : num_nodes_prior_l2,
                     'tissues_matching' : tissues_matching, 
                     'dist_l1_l2' : dist_l1_l2,
                     'mrca_proportion_children_root_tissue' : mrca_proportion_children_root_tissue,
-                    'mrca_migration_event' : mrca_migration_event}
+                    'mrca_proportion_children_l1_tissue' : mrca_proportion_children_l1_tissue,
+                    'mrca_proportion_children_l2_tissue': mrca_proportion_children_l2_tissue,
+                    'mrca_tissue' : mrca_tissue}
             features_df = features_df.append(data, ignore_index = True)
             
             used_pairs.append(f'{l2_name}_{l1_name}')

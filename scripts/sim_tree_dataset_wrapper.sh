@@ -40,7 +40,7 @@ done
 
 echo "There are ${#commands[@]} commands to be submitted."
 
-echo "total_nodes_leaves,total_num_leaves,total_num_nodes,proportion_leaves_l1_tissue,proportion_leaves_l2_tissue,l1_sis_tissue_match,l2_sis_tissue_match,num_nodes_prior_l1,num_nodes_prior_l2,tissues_matching,dist_l1_l2,mrca_proportion_children_root_tissue,mrca_migration_event" > tree_dataset_${NAME}.csv
+echo "l1_tissue,l2_tissue,total_nodes_leaves,total_num_leaves,total_num_nodes,proportion_leaves_l1_tissue,proportion_leaves_l2_tissue,l1_sis_tissue,l2_sis_tissue,num_nodes_prior_l1,num_nodes_prior_l2,tissues_matching,dist_l1_l2,mrca_proportion_children_root_tissue,mrca_proportion_children_l1_tissue,mrca_proportion_children_l2_tissue,mrca_tissue" > tree_dataset_${NAME}.csv
 
 batch_size=${CORES}
 num_batches=$(((${#commands[@]} / $batch_size) + 1))
