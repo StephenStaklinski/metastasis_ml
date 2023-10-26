@@ -3,12 +3,12 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingClassifier
 
-# input_csv_train = sys.argv[1]
-# input_csv_test = sys.argv[2]
-input_csv_train = "tree_dataset_TRAIN.csv"
-input_csv_test = "tree_dataset_TEST.csv"
+input_csv_train = sys.argv[1]
+input_csv_test = sys.argv[2]
+# input_csv_train = "tree_dataset_TRAIN.csv"
+# input_csv_test = "tree_dataset_TEST.csv"
 
-tissue_num_dict = {'PRL': 1, 'HMR': 2, 'LGR': 3}
+tissue_num_dict = {'PRL': 1, 'HMR': 2, 'LGR': 3}    ### need to make this automated in final version to account for migration matrix input with different tissues
 tissue_num_dict_rev = {value: key for key, value in tissue_num_dict.items()}
 
 df_train = pd.read_csv(input_csv_train)
