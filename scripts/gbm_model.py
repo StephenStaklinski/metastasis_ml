@@ -28,7 +28,6 @@ mrca_key_test = df_test['mrca_name'].values
 mrca_tis_df = df_test[['mrca_name', 'mrca_tissue']]
 mrca_tis_df = mrca_tis_df.drop_duplicates(subset=['mrca_name'], keep='first')
 mrca_tis_df['mrca_tissue'] = mrca_tis_df['mrca_tissue'].replace(tissue_num_dict_rev)
-mrca_order = mrca_tis_df['mrca_name'].values
 df = df_test.drop(columns=['tree_name', 'l1_name', 'l2_name', 'mrca_name', 'mrca_tissue'])
 x_test = df.values
 
@@ -48,7 +47,8 @@ collapsed_mrca_pred = pd.crosstab(mrca_pred['mrca_name'], mrca_pred['prediction'
 collapsed_mrca_pred = collapsed_mrca_pred.rename(columns=tissue_num_dict_rev)
 collapsed_mrca_pred = collapsed_mrca_pred.reset_index()
 collapsed_mrca_pred['max_prediction'] = collapsed_mrca_pred.iloc[:, 1:].idxmax(axis=1)
-collapsed_mrca_pred = collapsed_mrca_pred.loc[collapsed_mrca_pred['mrca_name'].isin(mrca_order)]
+collapsed_mrca_pred = collapsed_mrca_pred.sort_values(by='mrca_name', ascending=True)
+mrca_tis_df = mrca_tis_df.sort_values(by='mrca_name', ascending=True)
 mrca_tis_df['max_prediction'] = collapsed_mrca_pred['max_prediction'].values
 
 # Compare the two columns to determine TP, FP, and FN
@@ -60,4 +60,4 @@ accuracy = correct / total
 print(accuracy)
 
 
-collapsed_mrca_pred.to_csv('mrca_pred.csv', index=False)
+#collapsed_mrca_pred.to_csv('mrca_pred.csv', index=False)
