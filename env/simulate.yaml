@@ -203,4 +203,3 @@ dependencies:
       - webencodings==0.5.1
       - widgetsnbextension==4.0.7
       - zipp==3.15.0
-prefix: /home/staklins/miniconda3/envs/simulate
