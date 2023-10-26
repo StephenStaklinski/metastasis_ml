@@ -62,3 +62,4 @@ for tree_name, df_test in df_test_all:
 accuracy_df = pd.DataFrame(list(tree_accuracy.items()), columns=['tree_name', 'internal_node_accuracy'])
 print(accuracy_df)
 print(accuracy_df['internal_node_accuracy'].mean())
+accuracy_df.to_csv('accuracy_test_data.csv')
