@@ -10,13 +10,13 @@ conda create -f env/sklearn.yaml
 
 Then, generate the training and testing data:
 ```
-./scripts/sim_tree_dataset_wrapper.sh --name TRAIN --num_trees 100 --migration_matrix_folder ./migration_matrix --cores 20
-./scripts/sim_tree_dataset_wrapper.sh --name TEST --num_trees 100 --migration_matrix_folder ./migration_matrix --cores 20
+./scripts/internal_nodes/sim_wrapper_internal_nodes.sh --name TRAIN --num_trees 100 --tree_size 100 --migration_matrix_folder ./migration_matrix_train --cores 40
+./scripts/internal_nodes/sim_wrapper_internal_nodes.sh --name TEST --num_trees 100 --tree_size 100 --migration_matrix_folder ./migration_matrix_test --cores 40
 ```
 
 Then, fit the model and find the prediction accuracy for internal node tissue labels:
 ```
 conda activate sklearn
-python scripts/gbm_model.py tree_dataset_TRAIN.csv tree_dataset_TEST.csv
+python scripts/internal_nodes/gbm_model_internal_nodes.py tree_dataset_TRAIN.csv tree_dataset_TEST.csv
 conda deactivate
 ```

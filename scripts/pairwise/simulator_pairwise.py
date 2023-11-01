@@ -99,32 +99,14 @@ def assign_tissue_labels(cas_tree,trans_mat):
     return tissues_df, tree_labeled
 
 
-
 ## PARAMETERS ##
 sample_num = int(sys.argv[1])
 migration_matrix_filepath = sys.argv[2]
 output_name = sys.argv[3]
-# num_cuts = int(sys.argv[4])
-# m = sys.argv[5]
-
-num_cuts = 100
-m = [(0.3)] * num_cuts
-
-# try:
-#     float(m)
-#     m = [float(m)] * num_cuts
-# except:
-#     if len(m.split(",")) == num_cuts:
-#         m = m.split(",")
-#         m = [float(i) for i in m]
-#     else:
-#         print("Comma-separated list of mutation rates was not of len 1 or equal to len of num_cuts. Exiting!")
-#         sys.exit()
 
 
-if sample_num > 10000:
-    print("Sample size is over 10,000 - this is too large. Exiting!")
-    sys.exit()
+# num_cuts = 100
+# m = [(0.6)] * num_cuts
 
 if migration_matrix_filepath != 'NA':
     migration_matrix = pd.read_csv(migration_matrix_filepath, header=0, index_col=0).to_dict(orient='index')
@@ -134,31 +116,29 @@ bd_sim = cas.sim.BirthDeathFitnessSimulator(
         #experiment_time = 280
         birth_waiting_distribution = lambda scale: np.random.exponential(scale),
         initial_birth_scale = 0.5,
-        num_extant = 10000
-    )
+        num_extant = sample_num)
+
 ground_truth_tree = bd_sim.simulate_tree()
-# downsample leaves
-ground_truth_tree = cas.sim.UniformLeafSubsampler(number_of_leaves=sample_num).subsample_leaves(ground_truth_tree)
-
-# To simulate barcode mutations
-final_matrix = sim_chars(ground_truth_tree,m,num_cuts,sample_num)
-
-# To reconstruct tree from simulated barcodes
-reconstructed_tree = cas.data.CassiopeiaTree(character_matrix = final_matrix, missing_state_indicator = -1)
-greedy_solver = cas.solver.VanillaGreedySolver()
-greedy_solver.solve(reconstructed_tree)
 
 if migration_matrix_filepath != 'NA':
     # overlay tissue labels for migration information
     tissue_labels_df, labeled_tree = assign_tissue_labels(ground_truth_tree,migration_matrix)
 
-# Change Casseiopeia trees to ETE tree to calculate RF distance between ground truth tree and reconstructed tree
-gtt_connections = ground_truth_tree.edges
-gtt_ete = Tree.from_parent_child_table(gtt_connections)
-rt_connections = reconstructed_tree.edges
-rt_ete = Tree.from_parent_child_table(rt_connections)
-rf, max_rf, common_leaves, partitions_t1, partisionss_t2, set1, set2 = gtt_ete.robinson_foulds(rt_ete)
-print(1 - (rf/max_rf))
+# # To simulate barcode mutations
+# final_matrix = sim_chars(ground_truth_tree,m,num_cuts,sample_num)
+
+# # To reconstruct tree from simulated barcodes
+# reconstructed_tree = cas.data.CassiopeiaTree(character_matrix = final_matrix, missing_state_indicator = -1)
+# greedy_solver = cas.solver.VanillaGreedySolver()
+# greedy_solver.solve(reconstructed_tree)
+
+# # Change Casseiopeia trees to ETE tree to calculate RF distance between ground truth tree and reconstructed tree
+# gtt_connections = ground_truth_tree.edges
+# gtt_ete = Tree.from_parent_child_table(gtt_connections)
+# rt_connections = reconstructed_tree.edges
+# rt_ete = Tree.from_parent_child_table(rt_connections)
+# rf, max_rf, common_leaves, partitions_t1, partisionss_t2, set1, set2 = gtt_ete.robinson_foulds(rt_ete)
+# print(1 - (rf/max_rf))
 
 ### Iterate through tree to make matrix of features and prediction is MRCA is a transition
 # initialize dataframe to save training datasets
@@ -295,5 +275,5 @@ for leaf1 in labeled_tree.iter_leaves():
             
             used_pairs.append(f'{l2_name}_{l1_name}')
 
-features_df.to_csv(f'{output_name}.csv', index=False)
+features_df.to_csv(f'{output_name}', index=False)
 
