@@ -41,7 +41,7 @@ python scripts/internal_nodes/test_gbm_model_internal_nodes.py trained_gbm_model
 conda deactivate
 ```
 
-The `test_only_leaf_tissue_labels.nwk` file should be replaced with your newick file path, the `1,2,3` corresponds to the tissue names and is the default 3 tissue setting or should otherwise match the tissues used in the migration matrix for training, and the `test_features_leaf_tree.csv` is the output file path which is then fed into the gbm model for training.
+The `test_only_leaf_tissue_labels.nwk` file should be replaced with your newick file path, the `t1,t2,t3` corresponds to the tissue names and is the default 3 tissue setting or should otherwise match the tissues used in the migration matrix for training, and the `test_features_leaf_tree.csv` is the output file path which is then fed into the gbm model for training.
 
 If one would like to simulate a tree with only leaf labels, then do the following:
 ```
