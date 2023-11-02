@@ -16,7 +16,7 @@ Then, if you want to simulate training data:
 To then train the model:
 ```
 conda activate sklearn
-python scripts/internal_nodes/scripts/internal_nodes/train_gbm_model_internal_nodes.py tree_dataset_TRAIN.csv 
+python scripts/internal_nodes/train_gbm_model_internal_nodes.py tree_dataset_TRAIN.csv 
 conda deactivate
 ```
 

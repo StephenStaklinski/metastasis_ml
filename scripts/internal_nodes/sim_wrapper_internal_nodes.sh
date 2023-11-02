@@ -32,7 +32,7 @@ for migration_matrix in "$MIGRATION"/*; do
     for ((rep=0; rep<NUM_TREES; rep++))   ### Can set the amount of repeat simulations with the same parameters
     do
     output_name="batch_sim${j}.csv"
-    cmd="python scripts/simulator_internal_nodes.py ${TREE_SIZE} ${migration_matrix} ${output_name}"
+    cmd="python scripts/internal_nodes/simulator_internal_nodes.py ${TREE_SIZE} ${migration_matrix} ${output_name}"
     data_cmd="tail -n +2 ${output_name} >> "tree_dataset_${NAME}.csv""
     clean_cmd="rm ${output_name}"
     commands+=("$cmd && $data_cmd && $clean_cmd")
