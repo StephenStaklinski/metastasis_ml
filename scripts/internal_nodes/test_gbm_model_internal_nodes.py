@@ -14,11 +14,10 @@ clf = joblib.load(trained_model)
 
 # Import test data and group by trees to quanitfy tree level accuracy of internal node labels for each tree predictions
 df_test_all = pd.read_csv(input_csv_test)
-df_test_all = df_test_all.groupby('tree_name')
-
 ground_truth_tissues_provided = False
-if 'node_tissue' in df_test.columns.to_list():
+if 'node_tissue' in df_test_all.columns.to_list():
     ground_truth_tissues_provided = True
+df_test_all = df_test_all.groupby('tree_name')
 
 tree_accuracy = {}
 tree_accuracy_dfs = {}

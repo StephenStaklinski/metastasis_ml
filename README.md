@@ -35,8 +35,10 @@ conda deactivate
 
 To perform option 2:
 ```
-conda activate sklearn
+conda activate simulate
 python scripts/internal_nodes/leaf_labeled_newick_to_features_internal_nodes.py test_only_leaf_tissue_labels.nwk t1,t2,t3 test_features_leaf_tree.csv
+conda deactivate
+conda activate sklearn
 python scripts/internal_nodes/test_gbm_model_internal_nodes.py trained_gbm_model.joblib test_features_leaf_tree.csv
 conda deactivate
 ```
