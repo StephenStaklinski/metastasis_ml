@@ -53,3 +53,17 @@ conda deactivate
 ```
 
 This will output two newick files that are matched with one that only has the leaves labeled and the other that has the leaves and internal nodes labeled. Both of these newick files can be processed into features csv files for testing the gbm based on similar commands as above for option 2 using either the `scripts/internal_nodes/leaf_labeled_newick_to_features_internal_nodes.py` script for a newick file with only leaf labels or the `scripts/internal_nodes/all_labeled_newick_to_features_internal_nodes.py` script for a newick file with all node and leaf labels.
+
+
+To run MACHINA on leaf labeled tree to get internal node labels:
+```
+conda activate ete3
+./scripts/machina/prep_machina.sh test_only_leaf_tissue_labels.nwk
+conda deactivate
+```
+
+```
+conda activate machina
+./scripts/machina/run_machina.sh --edges test_only_leaf_tissue_labels.tree --labels test_only_leaf_tissue_labels.labeling --colors test_only_leaf_tissue_labels_colors.txt --primary-tissue t1 --outdir machina_results/
+conda deactivate
+```
