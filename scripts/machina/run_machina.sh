@@ -1,3 +1,6 @@
+#!/bin/bash
+source ~/miniconda3/etc/profile.d/conda.sh
+
 if [[ $# -eq 0 ]] ; then
     echo "Usage: run_machina.sh --edges <edges_file> --labels <labels_file> --colors <colors_file> --primary-tissue <tissue> --outdir <dir_path>"
     exit 0
@@ -55,8 +58,10 @@ fi
 
 MACHINA="pmh_sankoff"
 
-mkdir ${OUTDIR}
+if [[ -d $OUTDIR ]]; then
+    :
+else
+    mkdir ${OUTDIR}
+fi
+
 ${MACHINA} -p ${PTISSUE} -c ${COLORS} -o ${OUTDIR} ${EDGES} ${LABELS} &> ${OUTDIR}/machina_results.txt
-mv ${COLORS} ${OUTDIR}/${COLORS}
-mv ${EDGES} ${OUTDIR}/${EDGES}
-mv ${LABELS} ${OUTDIR}/${LABELS}

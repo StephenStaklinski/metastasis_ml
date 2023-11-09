@@ -121,5 +121,5 @@ ground_truth_tree = bd_sim.simulate_tree()
 # overlay tissue labels for migration information to tree leaves only
 labeled_tree_all, labeled_tree_leaves = assign_tissue_labels(ground_truth_tree,migration_matrix)
 
-labeled_tree_all.write(format=8, outfile = f'{output_name}_all_tissue_labels.nwk')
-labeled_tree_leaves.write(format=8, outfile = f'{output_name}_only_leaf_tissue_labels.nwk')
+labeled_tree_all.write(format=8, outfile = f'{output_name}/all_tissue_labels.nwk')
+labeled_tree_leaves.write(format=8, outfile = f'{output_name}/only_leaf_tissue_labels.nwk')

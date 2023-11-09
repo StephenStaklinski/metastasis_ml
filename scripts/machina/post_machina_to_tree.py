@@ -3,13 +3,13 @@ import ete3
 import pandas as pd
 import sys
 
-# leaf_tree = sys.argv[1]
-# machina_labels = sys.argv[2]
+leaf_tree = sys.argv[1]
+machina_labels = sys.argv[2]
+machina_dir = sys.argv[3]
 
-leaf_tree = "test_only_leaf_tissue_labels.nwk"
-machina_labels = "machina_results/T-t1-0.labeling"
+# leaf_tree = "test_only_leaf_tissue_labels.nwk"
+# machina_labels = "machina_results/T-t1-0.labeling"
 
-machina_dir = machina_labels.split("/")[-2]
 
 tree = ete3.Tree(leaf_tree, format=8)
 tree.get_tree_root().name = '0'

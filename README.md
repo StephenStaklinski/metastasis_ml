@@ -10,7 +10,7 @@ conda create -f env/sklearn.yaml
 
 Then, if you want to simulate training data:
 ```
-./scripts/internal_nodes/sim_wrapper_internal_nodes.sh --name TRAIN --num_trees 100 --tree_size 100 --migration_matrix_folder ./migration_matrix --cores 40
+./scripts/internal_nodes/sim_wrapper_internal_nodes.sh --name TRAIN --num_trees 100 --tree_size 1000 --migration_matrix_folder ./migration_matrix/training_set --cores 40
 ```
 
 To then train the model:
@@ -67,3 +67,5 @@ conda activate machina
 ./scripts/machina/run_machina.sh --edges test_only_leaf_tissue_labels.tree --labels test_only_leaf_tissue_labels.labeling --colors test_only_leaf_tissue_labels_colors.txt --primary-tissue t1 --outdir machina_results/
 conda deactivate
 ```
+
+awk -F',' 'NF <= 17' input.csv > output.csv

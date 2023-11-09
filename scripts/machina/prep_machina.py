@@ -4,12 +4,15 @@ import ete3
 import pandas as pd
 
 leaf_labeled_tree = sys.argv[1]
+output_dir = sys.argv[2]
+
 # leaf_labeled_tree = "test_only_leaf_tissue_labels.nwk"
 
-input_prefix = leaf_labeled_tree.split(".")[0]
-output_file_leaf = input_prefix + ".labeling"
-output_file_edges = input_prefix + ".tree"
-output_file_colors = input_prefix + "_colors.txt"
+input_file = leaf_labeled_tree.split("/")[-1]
+input_prefix = input_file.split(".")[0]
+output_file_leaf = output_dir + "/" + input_prefix + ".labeling"
+output_file_edges = output_dir + "/" + input_prefix + ".tree"
+output_file_colors = output_dir + "/" + input_prefix + "_colors.txt"
 
 tree = ete3.Tree(leaf_labeled_tree, format=8)
 tree.get_tree_root().name = '0'

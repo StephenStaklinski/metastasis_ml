@@ -6,6 +6,8 @@ from sklearn.ensemble import GradientBoostingClassifier
 
 trained_model = sys.argv[1]
 input_csv_test = sys.argv[2]
+output_dir = sys.argv[3]
+
 # trained_model = "trained_gbm_model.joblib"
 # input_csv_test = "test_features_leaf_tree.csv"
 
@@ -42,7 +44,8 @@ for tree_name, df_test in df_test_all:
     results = clf.predict(x_test)
     # unique_values, counts = np.unique(results, return_counts=True)
 
-    node_tis_df['prediction'] = results
+    node_tis_df = node_tis_df.copy()
+    node_tis_df.loc[:, 'prediction'] = results.astype(int)
 
     if ground_truth_tissues_provided == True:
         node_tis_df['correct'] = (node_tis_df['node_tissue'] == node_tis_df['prediction']).astype(int)
@@ -54,7 +57,7 @@ if ground_truth_tissues_provided == True:
     accuracy_df = pd.DataFrame(list(tree_accuracy.items()), columns=['tree_name', 'internal_node_accuracy'])
     print(accuracy_df)
     print(accuracy_df['internal_node_accuracy'].mean())
-    accuracy_df.to_csv('gbm_accuracy_test_data.csv', index = False)
+    accuracy_df.to_csv(f'{output_dir}/gbm_accuracy.csv', index = False)
 
 combined_df = pd.concat(tree_accuracy_dfs.values(), axis=0, keys=tree_accuracy_dfs.keys())
-combined_df.to_csv('gbm_raw_test_data.csv')
+combined_df.to_csv(f'{output_dir}/gbm_data.csv')

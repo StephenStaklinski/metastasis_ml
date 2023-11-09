@@ -14,7 +14,8 @@ output_name = sys.argv[3]
 # tissues = str("1,2,3").split(",")
 # output_name = "test_features_leaf_tree.csv"
 
-output_prefix = output_name.split("_")[0]
+output_file = output_name.split("/")[-1]
+output_prefix = output_file.split("_")[0]
 
 with open(labeled_newick_path, "r") as file:
     newick_string = file.read()
