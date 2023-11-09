@@ -24,7 +24,7 @@ for ((i=1; i<=n_reps; i++)); do
 done
 
 
-parallel -j 50 < "${parallel_name}/parallel.txt"
+parallel -j 40 < "${parallel_name}/parallel.txt"
 rm ${parallel_name}/parallel.txt
 mkdir ${parallel_name}/data
 mv ${parallel_name}/sim* ${parallel_name}/data/
