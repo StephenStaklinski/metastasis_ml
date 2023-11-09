@@ -12,6 +12,8 @@ outdir = sys.argv[4]
 # machina_tree_file = "parallel_compare_gbm_machina/sim1/machina_tree_all_tissue_labels.nwk"
 # outdir = "parallel_compare_gbm_machina/sim1"
 
+outname = outdir.split("/")[-1]
+
 true_tree = ete3.Tree(true_tree_file, format = 8)
 true_tree.get_tree_root().name = '0_t1'
 gbm_tree = ete3.Tree(gbm_tree_file, format = 8)
@@ -49,7 +51,7 @@ else:
     accuracy_gbm_nonprimary = 1.0
     accuracy_gbm_nonprimary = 1.0
 
-result = {'name' : outdir, 
+result = {'name' : outname, 
           'accuracy_gbm' : accuracy_gbm, 
           'accuracy_machina' : accuracy_machina,
           'num_nonprimary_nodes' : num_nonprimary_nodes,
