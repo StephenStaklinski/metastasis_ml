@@ -6,12 +6,14 @@ true_tree_file = sys.argv[1]
 gbm_tree_file = sys.argv[2]
 machina_tree_file = sys.argv[3]
 outdir = sys.argv[4]
+mm = str(sys.argv[5])
 
 # true_tree_file = "parallel_compare_gbm_machina/sim1/all_tissue_labels.nwk"
 # gbm_tree_file = "parallel_compare_gbm_machina/sim1/gbm_tree_all_tissue_labels.nwk"
 # machina_tree_file = "parallel_compare_gbm_machina/sim1/machina_tree_all_tissue_labels.nwk"
 # outdir = "parallel_compare_gbm_machina/sim1"
 
+mm = mm.split("/")[-1]
 outname = outdir.split("/")[-1]
 
 true_tree = ete3.Tree(true_tree_file, format = 8)
@@ -20,6 +22,8 @@ gbm_tree = ete3.Tree(gbm_tree_file, format = 8)
 gbm_tree.get_tree_root().name = '0_t1'
 machina_tree = ete3.Tree(machina_tree_file, format = 8)
 machina_tree.get_tree_root().name = '0_t1'
+
+tree_size = len(true_tree.get_leaves())
 
 true_nodes = [node.name for node in true_tree.traverse() if node.is_leaf() == False]
 gbm_nodes = [node.name for node in gbm_tree.traverse() if node.is_leaf() == False]
@@ -49,7 +53,7 @@ if num_nonprimary_nodes != 0:
     accuracy_machina_nonprimary = (subset_nonprimary['true'] == subset_nonprimary['machina']).mean()
 else:
     accuracy_gbm_nonprimary = 1.0
-    accuracy_gbm_nonprimary = 1.0
+    accuracy_machina_nonprimary = 1.0
 
 result = {'name' : outname, 
           'accuracy_gbm' : accuracy_gbm, 
@@ -58,5 +62,7 @@ result = {'name' : outname,
           'accuracy_gbm_nonprimary' : accuracy_gbm_nonprimary,
           'accuracy_machina_nonprimary' : accuracy_machina_nonprimary}
 result_df = pd.DataFrame([result])
+result_df['tree_size'] = tree_size
+result_df['migration_matrix'] = mm
 
 result_df.to_csv(f'{outdir}/accuracy_true_gbm_machina.csv', index=False)

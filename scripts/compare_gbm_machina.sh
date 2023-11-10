@@ -26,6 +26,12 @@ python scripts/internal_nodes/sim_leaf_and_all_labeled_matched_newicks.py ${tree
 conda deactivate
 
 # Run MACHINA on test trees
+# check if t1 exists as a leaf label otherwise MACHINA cannot run and exit 0 to discard the simulation
+if ! grep -q 't1' ${tree_dir}/only_leaf_tissue_labels.nwk; then
+    echo "Primary tissue label t1 not in leaf labels. MACHINA cannot run. Exit and remove ${sim_name}."
+    exit 0
+fi
+
 start_time=$(date +%s.%N)
 
 machina_dir="${sim_dir}/${sim_name}_machina"
@@ -78,8 +84,10 @@ gbm_time=$(printf "%.2f" $(echo "$end_time - $start_time" | bc))
 
 # Compare accuracy of GBM and MACHINA trees against the ground truth tree
 conda activate ete3
-python scripts/accuracy_gbm_machina.py ${sim_dir}/all_tissue_labels.nwk ${sim_dir}/gbm_tree_all_tissue_labels.nwk ${sim_dir}/machina_tree_all_tissue_labels.nwk ${sim_dir}
+python scripts/accuracy_gbm_machina.py ${sim_dir}/all_tissue_labels.nwk ${sim_dir}/gbm_tree_all_tissue_labels.nwk ${sim_dir}/machina_tree_all_tissue_labels.nwk ${sim_dir} ${migration_matrix}
 conda deactivate
 
-echo "name,gbm_seconds,machina_seconds" > ${sim_dir}/time_gbm_machina.csv
-echo "${sim_name},${gbm_time},${machina_time}" >> ${sim_dir}/time_gbm_machina.csv
+mm=$(IFS='/' read -ra parts <<< "$migration_matrix" && echo "${parts[-1]}")
+
+echo "name,tree_size,migration_matrix,gbm_seconds,machina_seconds" > ${sim_dir}/time_gbm_machina.csv
+echo "${sim_name},${tree_size},${mm},${gbm_time},${machina_time}" >> ${sim_dir}/time_gbm_machina.csv
