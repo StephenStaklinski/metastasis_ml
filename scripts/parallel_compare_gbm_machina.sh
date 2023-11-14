@@ -1,9 +1,12 @@
 #!/bin/bash
 
-parallel_name="variable_sizes_trueMM_parallel_compare_gbm_machina_11_10_23"
+# set mem limit to 50 GB to prevent evolgen crash
+ulimit -v 50000000
 
-tree_size=(100 250 500 750 1000)
-migration_matrix="migration_matrix/true_migration_prob_matrix.csv"
+parallel_name="highMM_parallel_compare_gbm_machina_11_14_23"
+
+tree_size=(100 200 300 400 500)
+migration_matrix="migration_matrix/high_migration_prob_matrix.csv"
 
 mkdir ${parallel_name}
 touch ${parallel_name}/parallel.txt
@@ -28,7 +31,7 @@ for size in "${tree_size[@]}"; do
 done
 
 
-parallel -j 40 < "${parallel_name}/parallel.txt"
+parallel -j 20 < "${parallel_name}/parallel.txt"
 rm ${parallel_name}/parallel.txt
 mkdir ${parallel_name}/data
 mv ${parallel_name}/sim* ${parallel_name}/data/
