@@ -98,7 +98,7 @@ migration_matrix_filepath = sys.argv[2]
 output_name = sys.argv[3]
 
 # sample_num = 100
-# migration_matrix_filepath = "migration_matrix_train/true_migration_prob_matrix.csv"
+# migration_matrix_filepath = "migration_matrix/true_migration_prob_matrix.csv"
 # output_name = "test"
 
 

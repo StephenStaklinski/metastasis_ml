@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# set mem limit to 50 GB to prevent evolgen crash
-ulimit -v 50000000
+parallel_name="variableSizes_midMM_parallel_compare_gbm_consensus_11_14_23"
 
-parallel_name="highMM_parallel_compare_gbm_machina_11_14_23"
-
-tree_size=(100 200 300 400 500)
-migration_matrix="migration_matrix/high_migration_prob_matrix.csv"
+tree_size=(100 250 500 750)
+migration_matrix="migration_matrix/mid_migration_prob_matrix.csv"
 
 mkdir ${parallel_name}
 touch ${parallel_name}/parallel.txt
 
-echo "name,accuracy_gbm,accuracy_machina,num_nonprimary_nodes,accuracy_nonprimary_gbm,accuracy_machina_nonprimary,tree_size,migration_matrix" > ${parallel_name}/accuracy_gbm_machina.csv
-echo "name,tree_size,migration_matrix,gbm_seconds,machina_seconds" > ${parallel_name}/time_gbm_machina.csv
+# echo "name,accuracy_gbm,accuracy_machina,accuracy_consensus,num_nonprimary_nodes,accuracy_nonprimary_gbm,accuracy_machina_nonprimary,accuracy_consensus_nonprimary,tree_size,migration_matrix" > ${parallel_name}/accuracy_gbm_machina.csv
+# echo "name,tree_size,migration_matrix,gbm_seconds,machina_seconds,consensus_seconds" > ${parallel_name}/time_gbm_machina.csv
+
+echo "name,accuracy_gbm,accuracy_consensus,num_nonprimary_nodes,accuracy_nonprimary_gbm,accuracy_consensus_nonprimary,tree_size,migration_matrix" > ${parallel_name}/accuracy_gbm_machina.csv
+echo "name,tree_size,migration_matrix,gbm_seconds,consensus_seconds" > ${parallel_name}/time_gbm_machina.csv
 
 
-n_reps=10
+n_reps=100
 j=0
 for size in "${tree_size[@]}"; do
     for ((i=1; i<=n_reps; i++)); do
@@ -31,7 +31,7 @@ for size in "${tree_size[@]}"; do
 done
 
 
-parallel -j 20 < "${parallel_name}/parallel.txt"
+parallel -j 50 < "${parallel_name}/parallel.txt"
 rm ${parallel_name}/parallel.txt
 mkdir ${parallel_name}/data
 mv ${parallel_name}/sim* ${parallel_name}/data/
