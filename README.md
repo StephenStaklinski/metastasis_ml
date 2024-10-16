@@ -76,7 +76,7 @@ This repo mimics this feature vector approach to training a classifier, but it i
 
 ![Alt text](/results/range_sizes_trueMM_parallel_compare_gbm_machina_11_14_23/accuracy_gbm_machina.png?raw=true "Performance of this GBM approach compared to MACHINA.")
 
-Scalability of this type of approach is promising, but a more serious approach and larger training datasets (real data if eventually possible) are likely necessary to improve performance significantly.
+Scalability of this type of approach is promising, but a more serious approach and larger training datasets are likely necessary to improve performance significantly.
 
 ![Alt text](/results/range_sizes_trueMM_parallel_compare_gbm_machina_11_14_23/time_plot.png?raw=true "Runtime for this GBM approach compared to MACHINA as a function of the number of tips in the clone tree.")
 
