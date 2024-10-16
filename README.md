@@ -1,4 +1,4 @@
-# Gradient Boosting Classifier for labeling metastasis events on clonal cancer tree with known tissue labels at the tips
+# Gradient Boosting Classifier idea for labeling metastasis events on a clonal cancer tree with known tissue labels at the tips
 Machine learning approach to add tissue labels to internal nodes of a tree given a cell phylogeny with labeled leaves. A gradient boosting classifier is trained from simulated data where clonal trees are simulated with ground truth tissue labels for internal nodes, and then features from the tree are retained into a vector for training the gradient boosting classifier.
 
 To run the simulations, train the model, and/or predict on different simulated data, you will need to first install the necessary conda environments:
