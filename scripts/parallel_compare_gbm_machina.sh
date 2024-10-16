@@ -1,9 +1,9 @@
 #!/bin/bash
 
-parallel_name="variableSizes_midMM_parallel_compare_gbm_consensus_11_14_23"
+parallel_name="runtime_trueMM_parallel_compare_gbm_consensus_11_15_23"
 
-tree_size=(100 250 500 750)
-migration_matrix="migration_matrix/mid_migration_prob_matrix.csv"
+tree_size=(100 250 500 750 1000 2000 3000 4000 5000 10000)
+migration_matrix="migration_matrix/true_migration_prob_matrix.csv"
 
 mkdir ${parallel_name}
 touch ${parallel_name}/parallel.txt
@@ -15,7 +15,7 @@ echo "name,accuracy_gbm,accuracy_consensus,num_nonprimary_nodes,accuracy_nonprim
 echo "name,tree_size,migration_matrix,gbm_seconds,consensus_seconds" > ${parallel_name}/time_gbm_machina.csv
 
 
-n_reps=100
+n_reps=10
 j=0
 for size in "${tree_size[@]}"; do
     for ((i=1; i<=n_reps; i++)); do

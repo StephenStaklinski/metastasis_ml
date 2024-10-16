@@ -1,4 +1,4 @@
-# Gradient Boosting Classifier for labeling metastasis events on clonal tree
+# Gradient Boosting Classifier for labeling metastasis events on clonal cancer tree with known tissue labels at the tips
 Machine learning approach to add tissue labels to internal nodes of a tree given a cell phylogeny with labeled leaves. A gradient boosting classifier is trained from simulated data where clonal trees are simulated with ground truth tissue labels for internal nodes, and then features from the tree are retained into a vector for training the gradient boosting classifier.
 
 To run the simulations, train the model, and/or predict on different simulated data, you will need to first install the necessary conda environments:
@@ -68,4 +68,17 @@ conda activate machina
 conda deactivate
 ```
 
-awk -F',' 'NF <= 17' input.csv > output.csv
+# Motivation and Results
+
+This approach was largely inspired by the cell lineage machine learning approach using a gradient boost machine to predict cell lineage relationships from a feature vector of barcode information. This tool was named [AMbeRland-TR](https://academic.oup.com/nargab/article/5/3/lqad077/7246553) and was the best performing method in a cell lineage reconstruction [DREAM challenge](https://www.sciencedirect.com/science/article/pii/S2405471221001940).
+
+This repo mimics this feature vector approach to training a classifier, but it is fairly underdeveloped since the performance of this method was seen to be on par with the best existing combinatorial optimization based method [MACHINA](https://github.com/raphael-group/machina) on relatively simple simulations of metastasis:
+
+![Alt text](/results/range_sizes_trueMM_parallel_compare_gbm_machina_11_14_23/accuracy_gbm_machina.png?raw=true "Performance of this GBM approach compared to MACHINA.")
+
+Scalability of this type of approach is promising, but a more serious artificial neural network approach and larger training datasets (real data if eventually possible) are likely necessary to improve performance significantly.
+
+![Alt text](/results/range_sizes_trueMM_parallel_compare_gbm_machina_11_14_23/time_plot.png?raw=true "Runtime for this GBM approach compared to MACHINA as a function of the number of tips in the clone tree.")
+
+
+
